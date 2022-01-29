@@ -1,55 +1,25 @@
-
-/* Reglas de encriptación: 
-"e" es convertido para "enter" 
-"i" es convertido para "imes"
-"a" es convertido para "ai"
-"o" es convertido para "ober"
-"u" es convertido para "ufat"
-Solo letras minusculas
-No se permite acentuación de palabras 
-*/
-
-/* Reglas de desencriptación: 
-"enter" es convertido para "e" 
-"imes" es convertido para "i"
-"ai" es convertido para "a"
-"ober" es convertido para "o"
-"ufat" es convertido para "u"
-Solo letras minusculas
-No se permite acentuación de palabras   
-*/
-
-var botonEncriptar = document.querySelector("#btn-encriptar");
-var botonDesencriptar = document.querySelector("#btn-desencriptar");
-var botonCopiar = document.querySelector("#btn-copy");
+var botonEncriptar = obtenerElemento("#btn-encriptar");
+var botonDesencriptar = obtenerElemento("#btn-desencriptar");
+var botonCopiar = obtenerElemento("#btn-copy");
+var baseEncriptar = true;
+var baseDesencriptar = false;
 
 
 botonEncriptar.addEventListener("click", function (event) {
     event.preventDefault();
-    var textoEntrada = document.querySelector("#input-texto");
-
-
-    if (textoEntrada.value.length > 0) {
-        obtenerTexto(true);
-    }
-
+    procesarPeticionBtn(baseEncriptar);
 
 })
 
 botonDesencriptar.addEventListener("click", function (event) {
     event.preventDefault();
-
-    var textoEntrada = document.querySelector("#input-texto");
-
-    if (textoEntrada.value.length > 0) {
-        obtenerTexto(false);
-    }
+    procesarPeticionBtn(baseDesencriptar);
 
 })
 
 botonCopiar.addEventListener("click", function (event) {
-    var textoEntrada = document.querySelector("#input-texto");
-    var mensaje = document.querySelector("#msg");
+    var textoEntrada = obtenerElemento("#input-texto");
+    var mensaje = obtenerElemento("#msg");
     textoEntrada.value = "";
 
     textoEntrada.value = mensaje.value;
@@ -57,59 +27,48 @@ botonCopiar.addEventListener("click", function (event) {
 
 })
 
-function obtenerTexto(conversion){
-    var textoEntrada = document.querySelector("#input-texto");
-    var mensaje = document.querySelector("#msg");
-    var textoSalida = "";
+function procesarPeticionBtn(peticionBase){
+    var textoEntrada = obtenerValorElemento("#input-texto");
+    var textoRequisito = obtenerElemento("#textoValidar");
+    var mensaje = obtenerElemento("#msg");
     mensaje.value = "";
+    var textoValido = validarTexto(textoEntrada);
 
-
-    if (textoEntrada.value.length > 0) {
-        var textoValido = validarTexto(textoEntrada.value);
+    if (textoEntrada.length > 0) {
         if (textoValido) {
-            if (conversion) {
-                textoSalida = encriptar(textoEntrada.value);
+            
+            if (peticionBase) {
+                mensaje.value = encriptar(textoEntrada);
             } else {
-                textoSalida = desencriptar(textoEntrada.value);
+                mensaje.value = desencriptar(textoEntrada);
             }
-            textoEntrada.value = "";
-            mensaje.value = textoSalida;
-        }       
 
+            
+            textoRequisito.classList.remove("resaltar");
+        } else {
+            textoRequisito.classList.add("resaltar");
+        }
     }
 
-}
-
-function encriptar(texto){
-    var nuevoTexto = "";
-    nuevoTexto = texto.replace(/e/g, "enter")
-    .replace(/i/g, "imes")
-    .replace(/a/g, "ai")
-    .replace(/o/g, "ober")
-    .replace(/u/g, "ufat");
-    return nuevoTexto;
-}
-
-function desencriptar(texto){
-    var nuevoTexto = "";
-    nuevoTexto = texto.replace(/enter/g, "e")
-    .replace(/imes/g, "i")
-    .replace(/ai/g, "a")
-    .replace(/ober/g, "o")
-    .replace(/ufat/g, "u");
-    return nuevoTexto;
 }
 
 function validarTexto(texto){
-    var textoRequisito = document.querySelector("#textoValidar");
+    // Expresion para detectar letras mayusculas y acentos    
     var expresion = new RegExp(/[A-Z\u00C0-\u017F]/);
     if (!expresion.test(texto)){
         //minusculas
-        textoRequisito.classList.remove("resaltar");
         return true;
     } else {
-        textoRequisito.classList.add("resaltar");
         return false;
     }
     
+}
+
+function obtenerValorElemento(identificador) {
+    var idObtenido = document.querySelector(identificador);
+    return idObtenido.value;
+}
+
+function obtenerElemento(identificador) {
+    return document.querySelector(identificador);
 }
