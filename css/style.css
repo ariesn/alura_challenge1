@@ -5,8 +5,9 @@
 }
 
 body {
-  background-color: whitesmoke;
+  background-color: #F3F5FC;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #0A3871;
 }
 
 .main {
@@ -37,7 +38,7 @@ body {
   border: 0;
   color: white;
   font-weight: bold;
-  background-color: blue;
+  background-color: #0A3871;
   padding: 10px;
   margin-top: 10px;
   border-radius: 0.5em;
@@ -51,6 +52,7 @@ body {
   width: 100%;
   height: 50px;
   margin-top: 20px;
+  box-shadow: 0px 14px 12px -8px rgba(0, 0, 0, 0.08);
 }
 
 footer {
